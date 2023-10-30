@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class EquipmentType extends Model
 {
     use HasFactory;
-    protected $guarded = false;
+    protected $fillable = [
+        'title',
+        'mask',
+    ];
 }

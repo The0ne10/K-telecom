@@ -22,7 +22,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'equipment_type_id' => 'required|integer',
+            'equipment_type_id' => 'required|exists:equipment_types,id',
             'serial_number' => 'required|string',
             'desc' => 'required|string'
         ];

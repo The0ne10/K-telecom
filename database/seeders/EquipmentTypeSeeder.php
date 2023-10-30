@@ -13,6 +13,14 @@ class EquipmentTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        EquipmentType::factory(10)->create();
+        $title = ['D-Link Dir-300', 'D-Link DIR-300 E', 'TP-Link TL-WR74'];
+        $mask = ['NXXAAXZXaa', 'NAAAAXZXXX', 'XXAAAAAXAA'];
+
+        foreach ($title as $key => $item) {
+            EquipmentType::query()->create([
+               'title' => $item,
+               'mask' => $mask[$key]
+            ]);
+        }
     }
 }

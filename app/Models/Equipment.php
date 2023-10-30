@@ -10,11 +10,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Equipment extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $guarded = false;
+    protected $fillable = [
+        'equipment_type_id',
+        'serial_number',
+        'desc'
+    ];
+
     protected $with = ['equipmentType'];
 
     public function equipmentType(): BelongsTo
     {
         return $this->belongsTo(EquipmentType::class);
     }
+
 }

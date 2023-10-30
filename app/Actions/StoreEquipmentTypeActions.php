@@ -2,53 +2,61 @@
 
 namespace App\Actions;
 
-/**
- *
- */
 class StoreEquipmentTypeActions
 {
-
-    /**
-     * @param $characters
-     * @return string
-     */
-    private function randomCharacter($characters): string
+    public static function prepareData($data, $sn)
     {
-        $randomChar = '';
+        $digit = str_split('123456789');
+        $highCharacter = str_split('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        $smallCharacter = str_split('abcdefghijklmnopqrstuvwxyz');
+        $intOrCharacter = str_split('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+        $simbol = str_split('-_@');
 
-        for ($i = 0; $i < 1; $i++) {
-            $index = rand(0, strlen($characters) - 1);
-            $randomChar .= $characters[$index];
+
+
+        $value = [];
+        $array = str_split($data);
+        $serialNumbers = str_split($sn);
+
+        foreach ($array as $key => $type) {
+            if($type == 'X') {
+                if (in_array($serialNumbers[$key], $intOrCharacter)) {
+                    $value[] = $serialNumbers[$key];
+                };
+            }
+            elseif ($type == 'N') {
+                if (in_array($serialNumbers[$key], $digit)) {
+                    $value[] = $serialNumbers[$key];
+                };
+            }
+            elseif ($type == 'A') {
+                if (in_array($serialNumbers[$key], $highCharacter)) {
+                    $value[] = $serialNumbers[$key];
+                };
+            }
+            elseif ($type == 'a') {
+                if (in_array($serialNumbers[$key], $smallCharacter)) {
+                    $value[] = $serialNumbers[$key];
+                };
+            }
+            elseif ($type == 'Z') {
+                if (in_array($serialNumbers[$key], $simbol)) {
+                    $value[] = $serialNumbers[$key];
+                };
+            }
         }
-
-        return $randomChar;
+        return implode($value);
     }
 
-    /**
-     * @param $length
-     * @return string
-     */
-    public static function getMask($length = 10): string
+    public function validMask($mask, $dataArray)
     {
-        $highCharacter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $smallCharacter = 'abcdefghijklmnopqrstuvwxyz';
-        $intOrCharacter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $randomSimbol = '-_@';
-
-        $N = rand(0, 9);
-        $A = (new StoreEquipmentTypeActions)->randomCharacter($highCharacter);
-        $a = (new StoreEquipmentTypeActions)->randomCharacter($smallCharacter);
-        $X = (new StoreEquipmentTypeActions)->randomCharacter($intOrCharacter);
-        $Z = (new StoreEquipmentTypeActions)->randomCharacter($randomSimbol);
-
-        $stringSpace = $N . $A . $a . $X . $Z;
-        $stringLength = strlen($stringSpace);
-        $randomString = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $randomString = $randomString . $stringSpace[rand(0, $stringLength - 1)];
+        $temp = [];
+        foreach ($dataArray as $key => $item) {
+            if (strlen(StoreEquipmentTypeActions::prepareData($mask, $item)) == 10) {
+                $temp[] = StoreEquipmentTypeActions::prepareData($mask, $item);
+            };
         }
-        return $randomString;
-    }
 
+        return array_unique($temp);
+    }
 }

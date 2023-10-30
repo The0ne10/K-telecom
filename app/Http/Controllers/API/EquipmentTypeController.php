@@ -2,34 +2,34 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Actions\StoreEquipmentTypeActions;
+use App\Actions\ScopeSearchActions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EquipmentType\StoreRequest;
 use App\Http\Resources\API\EquipmentTypeResource;
 use App\Models\EquipmentType;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 
 class EquipmentTypeController extends Controller
 {
     /**
      * @return JsonResource
      */
-    public function index(): JsonResource
+    public function index(Request $request, ScopeSearchActions $scopeSearchActions)
     {
-        $equipment_types = EquipmentType::query()->paginate(10);
-        return EquipmentTypeResource::collection($equipment_types);
+        return $scopeSearchActions->filterType($request);
     }
 
     /**
      * @param StoreRequest $request
-     * @param StoreEquipmentTypeActions $storeEquipmentTypeActions
+
      * @return JsonResponse
      */
-    public function store(StoreRequest $request, StoreEquipmentTypeActions $storeEquipmentTypeActions): JsonResponse
+    public function store(StoreRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $data['mask'] = $storeEquipmentTypeActions::getMask();
 
         EquipmentType::create($data);
 
@@ -40,18 +40,18 @@ class EquipmentTypeController extends Controller
      * @param EquipmentType $id
      * @return EquipmentTypeResource
      */
-    public function show(EquipmentType $id): EquipmentTypeResource
+    public function show(EquipmentType $equipmentType): EquipmentTypeResource
     {
-        return new EquipmentTypeResource($id);
+        return new EquipmentTypeResource($equipmentType);
     }
 
     /**
      * @param EquipmentType $id
      * @return JsonResponse
      */
-    public function delete(EquipmentType $id): JsonResponse
+    public function delete(EquipmentType $equipmentType): JsonResponse
     {
-        $id->delete();
+        $equipmentType->delete();
         return response()->json(['message' => 'success']);
     }
 }

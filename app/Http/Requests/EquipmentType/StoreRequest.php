@@ -23,6 +23,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
+            'mask' => 'required|string'
         ];
     }
 }
